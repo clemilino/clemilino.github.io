@@ -1,16 +1,15 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
-    <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
-    <script src="https://raw.githack.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.4/papaparse.min.js"></script>
-  </head>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+        <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
+        <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+        <script src="https://raw.githack.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
+    </head>
 
-  <body style="margin: 0; overflow: hidden;">
+    <body style="margin: 0; overflow: hidden;">
         <a-scene
             renderer="logarithmicDepthBuffer: true;"
             embedded
@@ -18,34 +17,21 @@
             arjs="sourceType: webcam; debugUIEnabled: false;"
         >
             <a-assets>
+                <a-asset-item
+                    id="animated-asset"
+                    src="assets/2_Matratzen.glb"
+                ></a-asset-item>
             </a-assets>
+
+                <a-entity
+                    look-at="[gps-camera]"
+                    animation-mixer="loop: repeat"
+                    gltf-model="#animated-asset"
+                    scale="0.0056236303684964115 0.0056236303684964115 0.0056236303684964115"
+                    gps-entity-place="latitude: 51.346076896972164; longitude: 12.406637719644696;"
+                ></a-entity>
 
             <a-camera gps-camera rotation-reader></a-camera>
         </a-scene>
-
-        <script>
-            // Read the CSV file
-            Papa.parse("points_test.csv", {
-                header: true,
-                download: true,
-                dynamicTyping: true,
-                complete: function(results) {
-                    // Get the data from the CSV file
-                    var data = results.data;
-
-                    // Loop through the data and create <a-entity> elements
-                    for (var i = 0; i < data.length; i++) {
-                        var asset = data[i];
-
-                        var entity = document.createElement("a-entity");
-                        entity.setAttribute("look-at", "[gps-camera]");
-                        entity.setAttribute("gltf-model", asset.asset_src);
-                        entity.setAttribute("gps-entity-place", "latitude: " + asset.latitude + "; longitude: " + asset.longitude + ";");
-
-                        document.querySelector("a-assets").appendChild(entity);
-                    }
-                }
-            });
-        </script>
     </body>
 </html>
